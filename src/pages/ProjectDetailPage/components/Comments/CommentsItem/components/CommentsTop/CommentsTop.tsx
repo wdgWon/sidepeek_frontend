@@ -4,14 +4,14 @@ import { Comment } from "api-models"
 import { useCommentContext } from "@pages/ProjectDetailPage/store/CommentContext"
 import dateToTimeago from "@pages/ProjectDetailPage/utils/datetoTimeago"
 
-import BeforeEditingButton from "./BeforeEditingButton"
-import OnEditingButton from "./OnEditingButton"
+import BeforeEditingButton from "./Button/BeforeEditingButton"
+import OnEditingButton from "./Button/OnEditingButton"
 
-interface CommentTitleProps {
+interface CommentTopProps {
   comment: Comment
 }
 
-const CommentTitle = ({ comment }: CommentTitleProps) => {
+const CommentTop = ({ comment }: CommentTopProps) => {
   const { isEditing, editTargetCommentId } = useCommentContext()
   const [isLargerThan768] = useMediaQuery(["(min-width: 768px)"])
 
@@ -30,7 +30,7 @@ const CommentTitle = ({ comment }: CommentTitleProps) => {
         </Text>
         {isLargerThan768 && (
           <Text
-            color="grey.500"
+            color="blue.100"
             fontSize="md">
             {dateToTimeago(comment.createdAt)}
           </Text>
@@ -53,4 +53,4 @@ const CommentTitle = ({ comment }: CommentTitleProps) => {
   )
 }
 
-export default CommentTitle
+export default CommentTop

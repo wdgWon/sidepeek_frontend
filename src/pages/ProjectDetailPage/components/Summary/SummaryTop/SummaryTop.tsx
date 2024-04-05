@@ -1,9 +1,10 @@
-import { FaRegComment } from "react-icons/fa"
-import { IoMdHeart, IoMdHeartEmpty } from "react-icons/io"
-import { MdRemoveRedEye } from "react-icons/md"
 import { Link } from "react-scroll"
 
-import { HStack, Stack, useDisclosure, useMediaQuery } from "@chakra-ui/react"
+import { HStack, useDisclosure, useMediaQuery } from "@chakra-ui/react"
+import { FaRegComment } from "@react-icons/all-files/fa/FaRegComment"
+import { IoMdHeart } from "@react-icons/all-files/io/IoMdHeart"
+import { IoMdHeartEmpty } from "@react-icons/all-files/io/IoMdHeartEmpty"
+import { MdRemoveRedEye } from "@react-icons/all-files/md/MdRemoveRedEye"
 import { useUserInfoData } from "@services/caches/useUserInfoData"
 
 import { useDeleteLikeMutation } from "@pages/ProjectDetailPage/hooks/mutations/useDeleteLikeMutation"
@@ -12,7 +13,7 @@ import { usePostLikeMutation } from "@pages/ProjectDetailPage/hooks/mutations/us
 
 import DeleteCheckModal from "../../DeleteCheckModal"
 import { ProjectIdProps, withProjectId } from "../../Hoc/withProjectId"
-import SummaryControl from "./SummaryControl"
+import SummaryPopOver from "./SummaryPopOver"
 import SummaryTopIcon from "./SummaryTopIcon"
 
 interface SummaryTopProps extends ProjectIdProps {
@@ -35,7 +36,7 @@ const SummaryTop = ({
 
   const { postLikeMutation } = usePostLikeMutation()
   const { deleteLikeMutation } = useDeleteLikeMutation(Number(projectId))
-  const { isOpen, onOpen, onClose } = useDisclosure()
+  const { isOpen, onOpen: handleOpenDeleteModal, onClose } = useDisclosure()
 
   const { deleteProjectMutation } = useDeleteProjectMutation()
   const user = useUserInfoData()
@@ -51,9 +52,7 @@ const SummaryTop = ({
       spacing="1.5rem"
       justifyContent="flex-end"
       align="center">
-      <Stack
-        direction="row"
-        spacing={isLargerThan1200 ? "1rem" : "0.5rem"}>
+      <HStack spacing={isLargerThan1200 ? "1rem" : "0.5rem"}>
         {isLargerThan768 && (
           <SummaryTopIcon
             count={viewCount}
@@ -92,8 +91,10 @@ const SummaryTop = ({
             />
           </Link>
         )}
-      </Stack>
-      {ownerId === user?.id && <SummaryControl onOpen={onOpen} />}
+      </HStack>
+      {ownerId === user?.id && (
+        <SummaryPopOver handleOpenDeleteModal={handleOpenDeleteModal} />
+      )}
       {isOpen && (
         <DeleteCheckModal
           onClick={handleDeleteProject}

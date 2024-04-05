@@ -1,14 +1,16 @@
 import { useNavigate } from "react-router-dom"
 
-import { Box, HStack, Stack, useMediaQuery } from "@chakra-ui/react"
+import { HStack, Stack, useMediaQuery } from "@chakra-ui/react"
 import { Comment } from "api-models"
+
+import AvatarCard from "@components/AvatarCard/AvatarCard"
 
 import { useCommentContext } from "@pages/ProjectDetailPage/store/CommentContext"
 
-import CommentTitle from "./components/CommentTitle"
-import CommentsAvatar from "./components/CommentsAvatar"
+import CommentsForm from "../CommentsForm/CommentsForm"
 import CommentsEditForm from "./components/CommentsEditForm"
 import CommentsText from "./components/CommentsText"
+import CommentTop from "./components/CommentsTop/CommentsTop"
 import ReplyButton from "./components/ReplyButton"
 import ReplyComment from "./components/ReplyComment"
 
@@ -24,7 +26,12 @@ const CommentsItem = ({ comment }: CommentsItemProps) => {
     navigate(`/profile/${userId}`)
   }
 
-  const { editTargetCommentId, isEditing } = useCommentContext()
+  const { editTargetCommentId, isEditing, isReply, replyTargetCommentId } =
+    useCommentContext()
+
+  const hasReply = !comment.parentId
+  const onReply = isReply && comment.id === replyTargetCommentId
+  const onEdit = editTargetCommentId === comment.id && isEditing
 
   return (
     <Stack
@@ -34,37 +41,46 @@ const CommentsItem = ({ comment }: CommentsItemProps) => {
         w="100%"
         gap={isLargerThan768 ? "2rem" : "1.3rem"}
         align="flex-start">
-        <CommentsAvatar
-          user={comment.user}
-          src={comment.user?.profileImageUrl ?? undefined}
+        <AvatarCard
+          border="none"
+          p="0"
+          _hover={comment.user ? { opacity: "0.5" } : {}}
+          cursor={comment.user ? "pointer" : "default"}
           onClick={() => {
-            if (comment.user.id) {
+            if (comment && comment.user) {
               handleNavigateProfile(comment.user.id)
             }
-          }}
-        />
-        <Box w="100%">
-          <HStack
-            justifyContent="space-between"
-            w="100%">
-            <Stack
-              w="100%"
-              gap="1rem"
-              align="flex-start">
-              <CommentTitle comment={comment} />
-              {editTargetCommentId === comment.id && isEditing ? (
-                <CommentsEditForm />
-              ) : (
-                <CommentsText text={comment.content} />
-              )}
+          }}>
+          <AvatarCard.Image src={comment.user?.profileImageUrl ?? undefined} />
+        </AvatarCard>
 
+        <HStack
+          justifyContent="space-between"
+          w="100%">
+          <Stack
+            w="100%"
+            gap="1rem"
+            align="flex-start">
+            <CommentTop comment={comment} />
+            {onEdit ? (
+              <CommentsEditForm />
+            ) : (
+              <CommentsText text={comment.content} />
+            )}
+            {hasReply && onReply && (
+              <CommentsForm
+                parentId={replyTargetCommentId}
+                isReplyComment
+              />
+            )}
+            {hasReply && (
               <ReplyButton
-                parentId={comment.parentId}
+                onReply={onReply}
                 commentId={comment.id}
               />
-            </Stack>
-          </HStack>
-        </Box>
+            )}
+          </Stack>
+        </HStack>
       </HStack>
       {comment.replies && <ReplyComment comment={comment.replies} />}
     </Stack>

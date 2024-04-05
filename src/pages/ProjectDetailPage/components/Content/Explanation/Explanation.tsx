@@ -1,12 +1,4 @@
-import {
-  Center,
-  Tab,
-  TabList,
-  TabPanel,
-  TabPanels,
-  Tabs,
-  Text,
-} from "@chakra-ui/react"
+import { Box, Tab, TabList, TabPanel, TabPanels, Tabs } from "@chakra-ui/react"
 import { Project } from "api-models"
 
 import ExplanationItem from "./ExplanationItem"
@@ -17,28 +9,24 @@ interface ExplanationProps {
 
 const Explanation = ({ projects }: ExplanationProps) => {
   return (
-    <Center
-      margin="0 auto"
-      w="100%">
+    <Box>
       <Tabs
         w="100%"
         size="lg"
         variant="enclosed"
         fontFamily="SCDream_Bold">
         <TabList>
-          <Tab borderTopRadius="1rem">
-            <Text
-              fontSize="2rem"
-              _hover={{ opacity: 0.5 }}>
-              기능
-            </Text>
+          <Tab
+            borderTopRadius="1rem"
+            fontSize="2xl"
+            _hover={{ opacity: 0.5 }}>
+            기능
           </Tab>
-          <Tab borderTopRadius="1rem">
-            <Text
-              fontSize="2rem"
-              _hover={{ opacity: 0.5 }}>
-              트러블 슈팅
-            </Text>
+          <Tab
+            borderTopRadius="1rem"
+            fontSize="2xl"
+            _hover={{ opacity: 0.5 }}>
+            트러블 슈팅
           </Tab>
         </TabList>
         <TabPanels>
@@ -50,7 +38,7 @@ const Explanation = ({ projects }: ExplanationProps) => {
           </TabPanel>
         </TabPanels>
       </Tabs>
-    </Center>
+    </Box>
   )
 }
 

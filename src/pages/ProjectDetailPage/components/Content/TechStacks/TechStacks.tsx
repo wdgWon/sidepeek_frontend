@@ -3,6 +3,8 @@ import { Skill, TechStack } from "api-models"
 
 import CommonTag from "@components/Tag/components/CommonTag"
 
+import EmptyMessage from "../../EmptyMessage/EmptyMessage"
+
 interface TechStacksProps {
   techStacks: TechStack[]
 }
@@ -21,8 +23,8 @@ const TechStacks = ({ techStacks }: TechStacksProps) => {
       </Text>
       {techStacks.length > 0 ? (
         <Stack spacing="3rem">
-          {techStacks.map(({ category, skill: skills }) => {
-            const skillList = skills as unknown as Skill[]
+          {techStacks.map(({ category, skill }) => {
+            const skillList = skill as unknown as Skill[]
             return (
               <Stack
                 key={category}
@@ -37,32 +39,33 @@ const TechStacks = ({ techStacks }: TechStacksProps) => {
                 <HStack
                   spacing="1rem"
                   flexWrap="wrap">
-                  {skillList.map((skill, index) => (
-                    <CommonTag
-                      leftElement={
-                        <Image
-                          src={skill.iconImageUrl}
-                          w="2rem"
-                          h="2rem"
-                        />
-                      }
-                      cursor="default"
-                      label={skill.name}
-                      key={`${skill.id}-${index}`}
-                      fontSize="lg"
-                    />
-                  ))}
+                  {skillList.map((skill, index) => {
+                    console.log(
+                      skill.iconImageUrl?.split(/\//).at(-1)?.split(/\./)[0],
+                    )
+                    return (
+                      <CommonTag
+                        leftElement={
+                          <Image
+                            src={skill.iconImageUrl}
+                            alt=""
+                            w="2rem"
+                          />
+                        }
+                        cursor="default"
+                        label={skill.name}
+                        key={`${skill.id}-${index}`}
+                        fontSize="lg"
+                      />
+                    )
+                  })}
                 </HStack>
               </Stack>
             )
           })}
         </Stack>
       ) : (
-        <Text
-          fontSize="lg"
-          color="grey.500">
-          등록된 기술 스택이 존재하지 않습니다.
-        </Text>
+        <EmptyMessage type="TECHSTACKS" />
       )}
     </Stack>
   )
