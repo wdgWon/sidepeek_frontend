@@ -5,4 +5,5 @@ interface ImportMetaEnv {
   readonly VITE_REFRESH_JWT_TOKEN_STORAGE_KEY: string
   readonly VITE_BASE_URL: string
   readonly VITE_EVENT_POPUP_KEY: string
+  readonly VITE_GITHUB_CLIENT_ID: string
 }
